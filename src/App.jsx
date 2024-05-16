@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { BlogProvider } from "./context/BlogContext";
 import List from "./components/List";
 import { Link } from "react-router-dom";
 import Header from "./components/Header";
-function App({searchedBlog, setSearchedBlog}) {
-  
-  const [search, setSearch] = useState('')
-  useEffect(()=>{
-  setSearchedBlog( searchedBlog.filter((blog)=>blog.title.includes(search)))
-  },[search])
+function App({searchedBlog, setSearchedBlog, blogs}) {
+  const [search, setSearch] = useState('');
 
+
+  useEffect(() => {
+    console.log(search)
+    if (search == '') {
+      setSearchedBlog(blogs);
+    } else {
+      const lowercaseSearch = search.toLowerCase();
+      setSearchedBlog(
+        blogs.filter((blog) => blog.title.toLowerCase().includes(lowercaseSearch))
+      );
+    }
+  }, [search]);
+  
  
+
 
   return (
 
@@ -54,7 +63,8 @@ function App({searchedBlog, setSearchedBlog}) {
                   className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500  "
                   placeholder="Search Blogs..."
                   required
-                  onChange={(e)=>{setSearch(e.target.value)}}
+                  onChange={(e)=>{
+                    setSearch(e.target.value)}}
                 />
                
               </div>

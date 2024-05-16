@@ -6,6 +6,7 @@ import CreateBlog from './components/CreateBlog.jsx';
 import './index.css';
 import Contact from './components/Contact.jsx';
 import { BlogProvider } from './context/BlogContext.js';
+import ReadMore from './components/ReadMore.jsx';
 
 const Main = () => {
   const [blogs, setBlogs] = useState(() => {
@@ -38,9 +39,10 @@ const Main = () => {
       <BlogProvider value={{ blogs, addBlog }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App searchedBlog={searchedBlog} setSearchedBlog={setSearchedBlog} />} />
+            <Route path="/" element={<App searchedBlog={searchedBlog} setSearchedBlog={setSearchedBlog}  blogs={blogs}/>} />
             <Route path="/createBlog" element={<CreateBlog />} />
             <Route path='/contact' element={<Contact />} />
+            <Route path='/readmore' element={<ReadMore blogs={blogs} />}  />
           </Routes>
         </BrowserRouter>
       </BlogProvider>
