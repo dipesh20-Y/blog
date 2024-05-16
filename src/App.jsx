@@ -3,53 +3,17 @@ import { BlogProvider } from "./context/BlogContext";
 import List from "./components/List";
 import { Link } from "react-router-dom";
 import Header from "./components/Header";
-function App() {
-  const [blogs, setBlogs] = useState(() => {
-    const localStorageValue = window.localStorage.getItem('blogs')
-    if (localStorageValue && localStorageValue !== 'undefined') {
-      return JSON.parse(localStorageValue)
-    }
-    return []
-  })
-  // const[isSearchClicked, setIsSearchClicked] = useState(false)
+function App({searchedBlog, setSearchedBlog}) {
+  
   const [search, setSearch] = useState('')
-  var searchedBlog = []
+  useEffect(()=>{
+  setSearchedBlog( searchedBlog.filter((blog)=>blog.title.includes(search)))
+  },[search])
 
-  const addBlog = (blog) => {
-    console.log(blog);
-    return setBlogs((prev) => [...prev, { id: Date.now(), ...blog }]);
-  };
-
-  // useEffect(() => {
-  //   const blogs = JSON.parse(localStorage.getItem("blogs"));
-  //   console.log(blogs);
-  //   if (blogs) {
-  //     setBlogs(blogs);
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    console.log(blogs )
-    localStorage.setItem("blogs", JSON.stringify(blogs));
-  }, [blogs]);
-
-  // useEffect(()=>{
-  // setBlogs( blogs.filter((blog)=>blog.title.includes(search)))
-  // },[search])
-
-  // const handleSearch =(e)=>{
-  //   setIsSearchClicked(true)
-  //   console.log(search)
-  //   search && (
-  //     searchedBlog = blogs.filter((blog)=>blog.title.include(search))
-      
-      
-  //   )
-  //   console.log(searchedBlog);
-  // }
+ 
 
   return (
-    <BlogProvider value={{ blogs, addBlog }}>
+
       <div>
         <Header />
         <div className=" flex justify-between  mr-24 mt-24 items-center">
@@ -92,12 +56,7 @@ function App() {
                   required
                   onChange={(e)=>{setSearch(e.target.value)}}
                 />
-                <button
-                  type="submit"
-                  className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Search
-                </button>
+               
               </div>
             </form>
           </div>
@@ -105,32 +64,9 @@ function App() {
 
         <div className="flex flex-col  flex-wrap justify-center  items-center mt-36">
           <div className="text-5xl mt-24  font-bold">Our Latest Blogs</div>
-          {/* {isSearchClicked ? (
-            searchedBlog &&
-            searchedBlog.map((blog) => {
-              return (
-                <List
-                  key={blog.id}
-                  title={blog.title}
-                  description={blog.description}
-                />
-              );
-            })
-          ) : (
-            blogs &&
-            blogs.map((blog) => {
-              return (
-                <List
-                  key={blog.id}
-                  title={blog.title}
-                  description={blog.description}
-                />
-              );
-            })
-          ) } */}
           
-          {blogs.length>0 &&
-            blogs.map((blog) => {
+          {searchedBlog.length>0 &&
+            searchedBlog.map((blog) => {
               return (
                 <List
                   key={blog.id}
@@ -142,7 +78,6 @@ function App() {
             })}
         </div>
       </div>
-    </BlogProvider>
   );
 }
 
